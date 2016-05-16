@@ -48,7 +48,7 @@ public class Adapter extends ChangeListTestCase {
       add(facade, rename(r, ((Entry)r.getChildren().toArray()[0]).getPath(), "FILE" + nextId()));
     }
   }
-  
+
   public void CreateFolder(){
     changes++;
     add(facade, createDirectory(r,"dir"+nextId()));
@@ -69,4 +69,4 @@ public class Adapter extends ChangeListTestCase {
     }
   }
 }
-}
+
