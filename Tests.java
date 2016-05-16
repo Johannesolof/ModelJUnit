@@ -42,6 +42,6 @@ public class Tests {
 
     tester.generate(123);
     tester.printCoverage();
-    
+
   }
 }
