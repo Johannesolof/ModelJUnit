@@ -29,7 +29,7 @@ import org.junit.Test;
  */
 public class Tests {
   @Test
-  public void testFire() throws Exception {
+  public void test() throws Exception {
     Model fireModel = new Model();
     Tester tester = new RandomTester(fireModel);
 
@@ -40,7 +40,8 @@ public class Tests {
     tester.addCoverageMetric(new StateCoverage());
     tester.addCoverageMetric(new ActionCoverage());
 
-    tester.generate(200000);
+    tester.generate(123);
     tester.printCoverage();
+    
   }
 }

@@ -15,9 +15,37 @@
  */
 package com.intellij.history.ModelJUnit;
 
+import com.intellij.history.core.changes.ChangeListTestCase;
+import com.intellij.history.core.changes.ChangeSet;
+import com.intellij.history.core.tree.Entry;
+
+import java.util.List;
+
 /**
  * Created by johannes on 2016-05-16.
  */
-public class Adapter {
+public class Adapter extends ChangeListTestCase {
 
+  int changes = 0;
+
+  public void CreateFile(){
+    changes++;
+    add(facade, createFile(r, "file" + nextId()));
+  }
+
+  public void DeleteFile(){
+    if (!r.getChildren().isEmpty())
+    {
+      changes++;
+      add(facade, delete(r, ((Entry)r.getChildren().toArray()[0]).getPath()));
+    }
+  }
+
+  public void RenameFile(){
+    if (!r.getChildren().isEmpty())
+    {
+      changes++;
+      add(facade, rename(r, ((Entry)r.getChildren().toArray()[0]).getPath(), "FILE" + nextId()));
+    }
+  }
 }
