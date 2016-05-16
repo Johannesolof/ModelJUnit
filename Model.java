@@ -90,11 +90,11 @@ public class Model implements FsmModel {
   @Action
   public void createFolder() {
     adapter.createFolder();
-    state = State.Idle;
+    state = State.NewChange;
   }
 
   public boolean createFolderGuard() {
-    return state == State.NewChangeSet;
+    return state == State.Idle;
   }
 
   @Action
