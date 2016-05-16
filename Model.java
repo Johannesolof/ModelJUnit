@@ -15,7 +15,7 @@
  */
 package com.intellij.history.ModelJUnit;
 
-import com.intellij.icons.AllIcons;
+import com.intellij.psi.codeStyle.arrangement.match.StandardArrangementEntryMatcherTest;
 import nz.ac.waikato.modeljunit.Action;
 import nz.ac.waikato.modeljunit.FsmModel;
 
@@ -28,7 +28,11 @@ public class Model implements FsmModel {
 
   private enum State {
     Idle,
-    NewChangeSet, NewChange, HistoryViewSourceTree, DifferenceViewReadOnly, ClosingView,
+    NewChangeSet, NewChange,
+    HistoryViewSourceTree, HistoryViewFileDifference, HistoryViewSingleFile,
+    ListViewRecentChanges,
+    DifferenceViewReadOnly, ClosingDialog,
+    Reverting, FinishReverting,
   }
 
   private State state = State.Idle;
@@ -155,7 +159,7 @@ public class Model implements FsmModel {
   }
 
   public boolean closeViewGuard() {
-    return state == State.HistoryViewSourceTree || state == State.ClosingView;
+    return state == State.HistoryViewSourceTree || state == State.ClosingDialog;
   }
 
   @Action
@@ -181,11 +185,49 @@ public class Model implements FsmModel {
 
   @Action
   public void closingView() {
-    myHistoryDialogAdapter.closingView();
-    state = State.ClosingView;
+    adapter.closingView();
+    state = State.ClosingDialog;
   }
 
   public boolean closingViewGuard() {
     return state == State.DifferenceViewReadOnly;
   }
+  
+  //region Revert
+
+  @Action
+  public void revertFromSourceTree() {
+    adapter.revertFromSourceTree();
+    prevView = State.HistoryViewSourceTree;
+    state = State.Reverting;
+  }
+
+  public boolean revertFromSourceTreeGuard() {
+    return state == State.HistoryViewSourceTree;
+  }
+
+  @Action
+  public void revertFromFileDifference() {
+    adapter.revertFromFileDifference();
+    prevView = State.HistoryViewFileDifference;
+    state = State.Reverting;
+  }
+
+  public boolean revertFromFileDifferenceGuard() {
+    return state == State.HistoryViewFileDifference; 
+  }
+
+  @Action
+  public void revertFromSingleFile() {
+    adapter.revertFromSingleFile();
+    prevView = State.HistoryViewSingleFile;
+    state = State.Reverting;
+  }
+
+  public boolean revertFromSingleFileGuard() {
+    return state == State.HistoryViewSingleFile;
+  }
+  
+  //endregion
+  
 }
