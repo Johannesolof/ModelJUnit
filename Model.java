@@ -15,6 +15,7 @@
  */
 package com.intellij.history.ModelJUnit;
 
+import com.intellij.icons.AllIcons;
 import nz.ac.waikato.modeljunit.Action;
 import nz.ac.waikato.modeljunit.FsmModel;
 
@@ -44,25 +45,20 @@ public class Model implements FsmModel {
   }
 
   //region Changes
+  @Action
+  public void createFile() {
+    adapter.createFile();
+    state = State.NewChange;
+  }
+
   public boolean createFileGuard() {
     return state == State.Idle;
   }
 
   @Action
-  public void createFile() {
-    if (state == State.Idle) {
-      adapter.CreateFile();
-      state = State.NewChange;
-    }
-  }
-
-
-  @Action
   public void renameFile() {
-    if (state == State.Idle) {
-      adapter.RenameFile();
-      state = State.NewChange;
-    }
+    adapter.renameFile();
+    state = State.NewChange;
   }
 
   public boolean renameFileGuard() {
@@ -72,7 +68,7 @@ public class Model implements FsmModel {
 
   @Action
   public void moveFile() {
-    adapter.MoveFile();
+    adapter.moveFile();
     state = State.NewChange;
   }
 
@@ -83,11 +79,31 @@ public class Model implements FsmModel {
 
   @Action
   public void deleteFile() {
-    adapter.DeleteFile();
+    adapter.deleteFile();
     state = State.NewChange;
   }
 
   public boolean deleteFileGuard() {
+    return state == State.Idle;
+  }
+
+  @Action
+  public void createFolder() {
+    adapter.createFolder();
+    state = State.Idle;
+  }
+
+  public boolean createFolderGuard() {
+    return state == State.NewChangeSet;
+  }
+
+  @Action
+  public void changeContent() {
+    adapter.changeContent();
+    state = State.NewChange;
+  }
+
+  public boolean changeContentGuard() {
     return state == State.Idle;
   }
 
