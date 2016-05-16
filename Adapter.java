@@ -55,7 +55,6 @@ public class Adapter extends ChangeListTestCase {
   public void moveFile() {
     if (!r.getChildren().isEmpty()) {
       changes++;
-      // add(facade, move(r, ((Entry)r.getChildren().toArray()[0]).getPath(), "root2"));
       addChangeSet(facade, "1", createDirectory(r, "dir1"), createDirectory(r, "dir2"));
       String filePath = "file" + nextId();
       add(facade, createFile(r, filePath, "one"));
@@ -71,5 +70,7 @@ public class Adapter extends ChangeListTestCase {
       add(facade, changeContent(r, filePath, "two"));
     }
   }
+
+
 }
 

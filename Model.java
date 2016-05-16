@@ -24,6 +24,7 @@ import nz.ac.waikato.modeljunit.FsmModel;
  */
 public class Model implements FsmModel {
   private Adapter adapter = new Adapter();
+  private HistoryDialogAdapter myHistoryDialogAdapter = new HistoryDialogAdapter();
 
   private enum State {
     Idle,
@@ -130,7 +131,7 @@ public class Model implements FsmModel {
 
   @Action
   public void showHistoryOfFolder() {
-    adapter.showHistoryOfFolder();
+    myHistoryDialogAdapter.showHistoryFolder();
     state = State.HistoryViewSourceTree;
   }
 
@@ -140,7 +141,7 @@ public class Model implements FsmModel {
 
   @Action
   public void closeView() {
-    adapter.closeView();
+    myHistoryDialogAdapter.closeView();
     switch (prevView)
     {
       case Idle:
@@ -159,7 +160,7 @@ public class Model implements FsmModel {
 
   @Action
   public void newSelectionSourceTree() {
-    adapter.newSelectionSourceTree();
+    myHistoryDialogAdapter.newSelectionSourceTree();
     state = State.HistoryViewSourceTree;
   }
 
@@ -169,7 +170,7 @@ public class Model implements FsmModel {
 
   @Action
   public void showDifferenceReadOnly() {
-    adapter.showDifferenceReadOnly();
+    myHistoryDialogAdapter.showDifferenceReadOnly();
     prevView = State.HistoryViewSourceTree;
     state = State.DifferenceViewReadOnly;
   }
@@ -180,7 +181,7 @@ public class Model implements FsmModel {
 
   @Action
   public void closingView() {
-    adapter.closingView();
+    myHistoryDialogAdapter.closingView();
     state = State.ClosingView;
   }
 
