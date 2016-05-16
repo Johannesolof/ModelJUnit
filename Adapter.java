@@ -15,16 +15,47 @@
  */
 package com.intellij.history.ModelJUnit;
 
+import com.intellij.history.core.InMemoryLocalHistoryFacade;
+import com.intellij.history.core.LocalHistoryFacade;
 import com.intellij.history.core.LocalHistoryTestCase;
-import com.intellij.history.core.changes.CreateFileChange;
+import com.intellij.history.core.StoredContent;
+import com.intellij.history.core.changes.*;
+import com.intellij.history.core.tree.DirectoryEntry;
+import com.intellij.history.core.tree.FileEntry;
+import com.intellij.history.core.tree.RootEntry;
 
 /**
  * Created by johannes on 2016-05-16.
  */
 public class Adapter extends LocalHistoryTestCase {
 
+  protected LocalHistoryFacade facade = new InMemoryLocalHistoryFacade();
+  protected RootEntry r = new RootEntry();
+
   public void CreateFileChange(){
     new CreateFileChange(nextId(), "file");
+  }
+
+  public void CreateFolderChange(){
+    new CreateDirectoryChange(nextId(), "dir");
+  }
+
+  public void CreateMoveChange(){
+    new MoveChange(nextId(), "dir2/file", "dir1");
+  }
+
+  public void CreateRenameChange(){
+    new RenameChange(nextId(), "new name", "old name");
+  }
+  public void CreateDeleteChange(){
+    DirectoryEntry dir = new DirectoryEntry("dir");
+    dir.addChild(new FileEntry("file", new StoredContent(333), -1, false));
+    dir.addChild(new DirectoryEntry("subDir"));
+    new DeleteChange(nextId(), "entry", dir);
+
+  }
+  public void CreateChangeContentChange(){
+    new ContentChange(nextId(), "file", null, -1);
   }
 
 }

@@ -40,7 +40,7 @@ public class Tests {
     tester.addCoverageMetric(new StateCoverage());
     tester.addCoverageMetric(new ActionCoverage());
 
-    tester.generate(200000);
+    tester.generate(200);
     tester.printCoverage();
   }
 }

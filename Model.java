@@ -24,9 +24,9 @@ import nz.ac.waikato.modeljunit.FsmModel;
 public class Model implements FsmModel {
   private Adapter adapter = new Adapter();
 
-  private enum State{ Idle, NewChanges, NewChangeSet }
+  private enum State {Idle, NewChanges, NewChangeSet}
 
-  private enum Change{ CreateFolder, CreatedFile, Move, Rename, Delete, ChangeContent }
+  private enum Change {CreateFolder, CreatedFile, Move, Rename, Delete, ChangeContent}
 
   private Change c = Change.CreateFolder;
 
@@ -45,23 +45,25 @@ public class Model implements FsmModel {
 
   @Action
   public void change() {
-    if (state == State.Idle ){
-      if(c==Change.CreatedFile){
+    if (state == State.Idle) {
+      if (c == Change.CreatedFile) {
         adapter.CreateFileChange();
-      }else if(c==Change.CreatedFile){
-
-      }else if(c==Change.Move){
-
-      }else if(c==Change.Rename){
-
-      }else if(c==Change.Delete){
-
-      }else if(c==Change.ChangeContent){
-
       }
-
-     //TODO in adapter
-
+      else if (c == Change.CreateFolder) {
+        adapter.CreateFolderChange();
+      }
+      else if (c == Change.Move) {
+        adapter.CreateMoveChange();
+      }
+      else if (c == Change.Rename) {
+        adapter.CreateRenameChange();
+      }
+      else if (c == Change.Delete) {
+        adapter.CreateDeleteChange();
+      }
+      else if (c == Change.ChangeContent) {
+        adapter.CreateChangeContentChange();
+      }
 
       state = State.NewChanges;
     }
@@ -86,5 +88,4 @@ public class Model implements FsmModel {
       state = State.Idle;
     }
   }
-
 }
