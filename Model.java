@@ -15,6 +15,7 @@
  */
 package com.intellij.history.ModelJUnit;
 
+import com.intellij.history.core.LocalHistoryFacade;
 import com.intellij.psi.codeStyle.arrangement.match.StandardArrangementEntryMatcherTest;
 import nz.ac.waikato.modeljunit.Action;
 import nz.ac.waikato.modeljunit.FsmModel;
@@ -23,6 +24,7 @@ import nz.ac.waikato.modeljunit.FsmModel;
  * Created by johannes on 2016-05-16.
  */
 public class Model implements FsmModel {
+
   private Adapter adapter = new Adapter();
   private HistoryDialogAdapter myHistoryDialogAdapter = new HistoryDialogAdapter();
 
@@ -185,7 +187,7 @@ public class Model implements FsmModel {
 
   @Action
   public void closingView() {
-    adapter.closingView();
+    myHistoryDialogAdapter.closingView();
     state = State.ClosingDialog;
   }
 
@@ -194,7 +196,7 @@ public class Model implements FsmModel {
   }
   
   //region Revert
-
+/*
   @Action
   public void revertFromSourceTree() {
     adapter.revertFromSourceTree();
@@ -228,6 +230,7 @@ public class Model implements FsmModel {
     return state == State.HistoryViewSingleFile;
   }
   
-  //endregion
+  //
+  */
   
 }

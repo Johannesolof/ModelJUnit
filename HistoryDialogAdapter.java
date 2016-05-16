@@ -15,13 +15,11 @@
  */
 package com.intellij.history.ModelJUnit;
 
-import com.intellij.history.integration.ui.DirectoryHistoryDialogModelTest;
-import com.intellij.history.integration.ui.FileHistoryDialogTest;
+import com.intellij.history.core.LocalHistoryFacade;
+import com.intellij.history.core.LocalHistoryTestCase;
 import com.intellij.history.integration.ui.LocalHistoryUITestCase;
 import com.intellij.history.integration.ui.views.DirectoryHistoryDialog;
-import com.intellij.history.integration.ui.views.FileHistoryDialog;
 import com.intellij.openapi.util.Disposer;
-import com.intellij.openapi.vfs.VirtualFile;
 
 import javax.xml.ws.Action;
 
@@ -35,18 +33,15 @@ public class HistoryDialogAdapter extends LocalHistoryUITestCase {
 
   @Action
   public void showHistoryFolder(){
-    DirectoryHistoryDialog d = new DirectoryHistoryDialog(myProject, myGateway, myRoot);
-    Disposer.dispose(d);
+   //TODO
+  //  DirectoryHistoryDialog d = new DirectoryHistoryDialog(myProject, myGateway, myRoot);
+   // Disposer.dispose(d);
   }
 
   @Action
   public void newSelectionSourceTree(){
     //TODO
-
-
   }
-
-
 
   @Action
   public void closeView(){
@@ -64,4 +59,6 @@ public class HistoryDialogAdapter extends LocalHistoryUITestCase {
   public void closingView() {
     //TODO
   }
+
+
 }

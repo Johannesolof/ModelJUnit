@@ -15,16 +15,21 @@
  */
 package com.intellij.history.ModelJUnit;
 
+import com.intellij.history.core.InMemoryLocalHistoryFacade;
+import com.intellij.history.core.LocalHistoryFacade;
+import com.intellij.history.core.LocalHistoryTestCase;
 import com.intellij.history.core.changes.ChangeListTestCase;
-import com.intellij.history.core.changes.ChangeSet;
 import com.intellij.history.core.tree.Entry;
-
-import java.util.List;
+import com.intellij.history.core.tree.RootEntry;
 
 /**
  * Created by johannes on 2016-05-16.
  */
-public class Adapter extends ChangeListTestCase {
+public class Adapter extends LocalHistoryTestCase {
+ // protected LocalHistoryFacade facade = new InMemoryLocalHistoryFacade();
+
+  protected LocalHistoryFacade facade = LocalHistoryFacadeSingleton.getInstance();
+  protected RootEntry r = new RootEntry();
 
   int changes = 0;
 
