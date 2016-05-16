@@ -22,15 +22,6 @@ import nz.ac.waikato.modeljunit.FsmModel;
  * Created by johannes on 2016-05-16.
  */
 public class Model implements FsmModel {
-  private Adapter adapter = new Adapter();
-
-  private enum State {Idle, NewChanges, NewChangeSet}
-
-  private enum Change {CreateFolder, CreatedFile, Move, Rename, Delete, ChangeContent}
-
-  private Change c = Change.CreateFolder;
-
-  private State state = State.Idle;
 
 
   @Override
