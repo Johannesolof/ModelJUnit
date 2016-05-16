@@ -30,8 +30,8 @@ import org.junit.Test;
 public class Tests {
   @Test
   public void testFire() throws Exception {
-    Model fireModel = new Model();
-    Tester tester = new RandomTester(fireModel);
+    Model localHistoryModel = new Model();
+    Tester tester = new RandomTester(localHistoryModel);
 
     tester.buildGraph();
     tester.addListener(new VerboseListener());

@@ -45,12 +45,21 @@ public class Model implements FsmModel {
 
   @Action
   public void change() {
-    if (state == State.Idle && (c==Change.CreatedFile||
-    c==Change.CreatedFile||
-    c==Change.Move||
-    c==Change.Rename||
-    c==Change.Delete||
-    c==Change.ChangeContent)) {
+    if (state == State.Idle ){
+      if(c==Change.CreatedFile){
+        adapter.CreateFileChange();
+      }else if(c==Change.CreatedFile){
+
+      }else if(c==Change.Move){
+
+      }else if(c==Change.Rename){
+
+      }else if(c==Change.Delete){
+
+      }else if(c==Change.ChangeContent){
+
+      }
+
      //TODO in adapter
 
 

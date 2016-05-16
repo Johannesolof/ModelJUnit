@@ -15,9 +15,16 @@
  */
 package com.intellij.history.ModelJUnit;
 
+import com.intellij.history.core.LocalHistoryTestCase;
+import com.intellij.history.core.changes.CreateFileChange;
+
 /**
  * Created by johannes on 2016-05-16.
  */
-public class Adapter {
+public class Adapter extends LocalHistoryTestCase {
+
+  public void CreateFileChange(){
+    new CreateFileChange(nextId(), "file");
+  }
 
 }
