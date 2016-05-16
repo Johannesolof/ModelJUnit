@@ -28,38 +28,38 @@ public class Adapter extends ChangeListTestCase {
 
   int changes = 0;
 
-  public void CreateFile() {
+  public void createFile() {
     changes++;
     add(facade, createFile(r, "file" + nextId()));
   }
 
-  public void DeleteFile() {
+  public void deleteFile() {
     if (!r.getChildren().isEmpty()) {
       changes++;
       add(facade, delete(r, ((Entry)r.getChildren().toArray()[0]).getPath()));
     }
   }
 
-  public void RenameFile() {
+  public void renameFile() {
     if (!r.getChildren().isEmpty()) {
       changes++;
       add(facade, rename(r, ((Entry)r.getChildren().toArray()[0]).getPath(), "FILE" + nextId()));
     }
   }
 
-  public void CreateFolder() {
+  public void createFolder() {
     changes++;
     add(facade, createDirectory(r, "dir" + nextId()));
   }
 
-  public void MoveFile() {
+  public void moveFile() {
     if (!r.getChildren().isEmpty()) {
       changes++;
       add(facade, move(r, ((Entry)r.getChildren().toArray()[0]).getPath(), "root2"));
     }
   }
 
-  public void ChangeContent() {
+  public void changeContent() {
     if (!r.getChildren().isEmpty()) {
       changes++;
       add(facade, changeContent(r, ((Entry)r.getChildren().toArray()[0]).getPath(), "This is a content"));
