@@ -18,6 +18,7 @@ package com.intellij.history.ModelJUnit;
 import com.intellij.history.integration.ui.DirectoryHistoryDialogModelTest;
 import com.intellij.history.integration.ui.FileHistoryDialogTest;
 import com.intellij.history.integration.ui.LocalHistoryUITestCase;
+import com.intellij.history.integration.ui.views.DirectoryHistoryDialog;
 import com.intellij.history.integration.ui.views.FileHistoryDialog;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -27,15 +28,14 @@ import javax.xml.ws.Action;
 /**
  * Created by hui on 16/05/16.
  */
-public class HistoryDialogAdapter extends FileHistoryDialogTest {
+public class HistoryDialogAdapter extends LocalHistoryUITestCase {
 
 
   int changes = 0;
 
   @Action
   public void showHistoryFolder(){
-    VirtualFile file = createChildData(myRoot, "f.txt");
-    FileHistoryDialog d = new FileHistoryDialog(myProject, myGateway, file);
+    DirectoryHistoryDialog d = new DirectoryHistoryDialog(myProject, myGateway, myRoot);
     Disposer.dispose(d);
   }
 
