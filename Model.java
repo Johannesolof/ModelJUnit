@@ -27,11 +27,12 @@ public class Model implements FsmModel {
 
   private enum State {
     Idle,
-    NewChangeSet, NewChange,
+    NewChangeSet, NewChange, HistoryViewSourceTree, DifferenceViewReadOnly, ClosingView,
   }
 
   private State state = State.Idle;
 
+  private State prevView = State.Idle;
 
   @Override
   public Object getState() {
@@ -90,11 +91,11 @@ public class Model implements FsmModel {
   @Action
   public void createFolder() {
     adapter.createFolder();
-    state = State.Idle;
+    state = State.NewChange;
   }
 
   public boolean createFolderGuard() {
-    return state == State.NewChangeSet;
+    return state == State.Idle;
   }
 
   @Action
@@ -126,4 +127,64 @@ public class Model implements FsmModel {
   }
 
   //endregion
+
+  @Action
+  public void showHistoryOfFolder() {
+    adapter.showHistoryOfFolder();
+    state = State.HistoryViewSourceTree;
+  }
+
+  public boolean showHistoryOfFolderGuard() {
+    return state == State.Idle;
+  }
+
+  @Action
+  public void closeView() {
+    adapter.closeView();
+    switch (prevView)
+    {
+      case Idle:
+        state = State.Idle;
+        break;
+      case HistoryViewSourceTree:
+        state = State.HistoryViewSourceTree;
+        break;
+    }
+    prevView = State.Idle;
+  }
+
+  public boolean closeViewGuard() {
+    return state == State.HistoryViewSourceTree || state == State.ClosingView;
+  }
+
+  @Action
+  public void newSelectionSourceTree() {
+    adapter.newSelectionSourceTree();
+    state = State.HistoryViewSourceTree;
+  }
+
+  public boolean newSelectionSourceTreeGuard() {
+    return state == State.HistoryViewSourceTree;
+  }
+
+  @Action
+  public void showDifferenceReadOnly() {
+    adapter.showDifferenceReadOnly();
+    prevView = State.HistoryViewSourceTree;
+    state = State.DifferenceViewReadOnly;
+  }
+
+  public boolean showDifferenceReadOnlyGuard() {
+    return state == State.HistoryViewSourceTree;
+  }
+
+  @Action
+  public void closingView() {
+    adapter.closingView();
+    state = State.ClosingView;
+  }
+
+  public boolean closingViewGuard() {
+    return state == State.DifferenceViewReadOnly;
+  }
 }
