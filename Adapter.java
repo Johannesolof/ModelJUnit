@@ -48,7 +48,7 @@ public class Adapter extends ChangeListTestCase {
       add(facade, rename(r, ((Entry)r.getChildren().toArray()[0]).getPath(), "FILE" + nextId()));
     }
   }
-
+  
   public void CreateFolder(){
     changes++;
     add(facade, createDirectory(r,"dir"+nextId()));
@@ -58,15 +58,15 @@ public class Adapter extends ChangeListTestCase {
   public void MoveFile(){
     if(!r.getChildren().isEmpty()){
       changes++;
-      add(facade, move(r, "root1/dir", "root2"));
+      add(facade, move(r, ((Entry)r.getChildren().toArray()[0]).getPath(), "root2"));
     }
 
   }
   public void ChangeContent(){
     if(!r.getChildren().isEmpty()){
       changes++;
-      add(facade, createFile(r, "file", "one"));
-      add(facade, changeContent(r, "file", "two"));
+      add(facade, changeContent(r, ((Entry)r.getChildren().toArray()[0]).getPath(), "This is a content"));
     }
   }
+}
 }
