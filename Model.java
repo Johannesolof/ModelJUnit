@@ -40,52 +40,6 @@ public class Model implements FsmModel {
 
   @Override
   public void reset(boolean b) {
-    state = State.Idle;
-  }
 
-  @Action
-  public void change() {
-    if (state == State.Idle) {
-      if (c == Change.CreatedFile) {
-        adapter.CreateFileChange();
-      }
-      else if (c == Change.CreateFolder) {
-        adapter.CreateFolderChange();
-      }
-      else if (c == Change.Move) {
-        adapter.CreateMoveChange();
-      }
-      else if (c == Change.Rename) {
-        adapter.CreateRenameChange();
-      }
-      else if (c == Change.Delete) {
-        adapter.CreateDeleteChange();
-      }
-      else if (c == Change.ChangeContent) {
-        adapter.CreateChangeContentChange();
-      }
-
-      state = State.NewChanges;
-    }
-  }
-
-  @Action
-  public void changeSet() {
-    if (state == State.NewChanges) {
-      //TODO in adapter
-
-
-      state = State.NewChangeSet;
-    }
-  }
-
-  @Action
-  public void changeListAppend() {
-    if (state == State.NewChangeSet) {
-      //TODO in adapter
-
-
-      state = State.Idle;
-    }
   }
 }

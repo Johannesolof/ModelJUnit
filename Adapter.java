@@ -28,9 +28,7 @@ import com.intellij.history.core.tree.RootEntry;
  * Created by johannes on 2016-05-16.
  */
 public class Adapter extends LocalHistoryTestCase {
-
-  protected LocalHistoryFacade facade = new InMemoryLocalHistoryFacade();
-  protected RootEntry r = new RootEntry();
+  
 
   public void CreateFileChange(){
     new CreateFileChange(nextId(), "file");
