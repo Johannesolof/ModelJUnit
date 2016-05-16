@@ -24,8 +24,9 @@ import nz.ac.waikato.modeljunit.FsmModel;
 public class Model implements FsmModel {
   private Adapter adapter = new Adapter();
 
-  private enum State{ Idle, Change}
-
+  private enum State{ Idle,
+    NewChangeSet, NewChange,
+  }
 
   private State state = State.Idle;
 
@@ -41,28 +42,71 @@ public class Model implements FsmModel {
     state = State.Idle;
   }
 
+  //region Changes
+  public boolean createFileGuard() {
+    return state == State.Idle;
+  }
   @Action
-  public void createFile() {
+  public void createFile()
+  {
     if (state == State.Idle) {
-      adapter.CreateFile();
-      state = State.Idle;
+    adapter.CreateFile();
+    state = State.NewChange;
     }
   }
 
-  @Action
-  public void deleteFile() {
-    if (state == State.Idle) {
-      adapter.DeleteFile();
-      state = State.Idle;
-    }
-  }
 
   @Action
-  public void renameFile() {
+  public void renameFile()
+  {
     if (state == State.Idle) {
       adapter.RenameFile();
-      state = State.Idle;
+      state = State.NewChange;
     }
   }
+  public boolean renameFileGuard() {
+    return state == State.Idle;
+  }
+
+
+  @Action
+  public void moveFile()
+  {
+    adapter.MoveFile();
+    state = State.NewChange;
+  }
+  public boolean moveFileGuard() {
+    return state == State.Idle;
+  }
+
+
+  @Action
+  public void deleteFile()
+  {
+    adapter.DeleteFile();
+    state = State.NewChange;
+  }
+  public boolean deleteFileGuard() {
+    return state == State.Idle;
+  }
+
+  @Action
+  public void change() {
+      state = State.NewChangeSet;
+  }
+  public boolean changeGuard() {
+    return state == State.NewChange;
+  }
+
+  @Action
+  public void changeSet()
+  {
+    state = State.Idle;
+  }
+  public boolean changeSetGuard() {
+    return state == State.NewChangeSet;
+  }
+
+  //endregion
 
 }
