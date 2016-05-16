@@ -22,6 +22,12 @@ import nz.ac.waikato.modeljunit.FsmModel;
  * Created by johannes on 2016-05-16.
  */
 public class Model implements FsmModel {
+  private Adapter adapter = new Adapter();
+
+  private enum State{ Idle, Change}
+
+
+  private State state = State.Idle;
 
 
   @Override
@@ -31,6 +37,32 @@ public class Model implements FsmModel {
 
   @Override
   public void reset(boolean b) {
-
+    adapter = new Adapter();
+    state = State.Idle;
   }
+
+  @Action
+  public void createFile() {
+    if (state == State.Idle) {
+      adapter.CreateFile();
+      state = State.Idle;
+    }
+  }
+
+  @Action
+  public void deleteFile() {
+    if (state == State.Idle) {
+      adapter.DeleteFile();
+      state = State.Idle;
+    }
+  }
+
+  @Action
+  public void renameFile() {
+    if (state == State.Idle) {
+      adapter.RenameFile();
+      state = State.Idle;
+    }
+  }
+
 }

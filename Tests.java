@@ -29,9 +29,9 @@ import org.junit.Test;
  */
 public class Tests {
   @Test
-  public void testFire() throws Exception {
-    Model localHistoryModel = new Model();
-    Tester tester = new RandomTester(localHistoryModel);
+  public void test() throws Exception {
+    Model fireModel = new Model();
+    Tester tester = new RandomTester(fireModel);
 
     tester.buildGraph();
     tester.addListener(new VerboseListener());
@@ -40,7 +40,8 @@ public class Tests {
     tester.addCoverageMetric(new StateCoverage());
     tester.addCoverageMetric(new ActionCoverage());
 
-    tester.generate(200);
+    tester.generate(123);
     tester.printCoverage();
+
   }
 }

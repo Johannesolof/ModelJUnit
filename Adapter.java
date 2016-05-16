@@ -15,45 +15,37 @@
  */
 package com.intellij.history.ModelJUnit;
 
-import com.intellij.history.core.InMemoryLocalHistoryFacade;
-import com.intellij.history.core.LocalHistoryFacade;
-import com.intellij.history.core.LocalHistoryTestCase;
-import com.intellij.history.core.StoredContent;
-import com.intellij.history.core.changes.*;
-import com.intellij.history.core.tree.DirectoryEntry;
-import com.intellij.history.core.tree.FileEntry;
-import com.intellij.history.core.tree.RootEntry;
+import com.intellij.history.core.changes.ChangeListTestCase;
+import com.intellij.history.core.changes.ChangeSet;
+import com.intellij.history.core.tree.Entry;
+
+import java.util.List;
 
 /**
  * Created by johannes on 2016-05-16.
  */
-public class Adapter extends LocalHistoryTestCase {
-  
+public class Adapter extends ChangeListTestCase {
 
-  public void CreateFileChange(){
-    new CreateFileChange(nextId(), "file");
+  int changes = 0;
+
+  public void CreateFile(){
+    changes++;
+    add(facade, createFile(r, "file" + nextId()));
   }
 
-  public void CreateFolderChange(){
-    new CreateDirectoryChange(nextId(), "dir");
+  public void DeleteFile(){
+    if (!r.getChildren().isEmpty())
+    {
+      changes++;
+      add(facade, delete(r, ((Entry)r.getChildren().toArray()[0]).getPath()));
+    }
   }
 
-  public void CreateMoveChange(){
-    new MoveChange(nextId(), "dir2/file", "dir1");
+  public void RenameFile(){
+    if (!r.getChildren().isEmpty())
+    {
+      changes++;
+      add(facade, rename(r, ((Entry)r.getChildren().toArray()[0]).getPath(), "FILE" + nextId()));
+    }
   }
-
-  public void CreateRenameChange(){
-    new RenameChange(nextId(), "new name", "old name");
-  }
-  public void CreateDeleteChange(){
-    DirectoryEntry dir = new DirectoryEntry("dir");
-    dir.addChild(new FileEntry("file", new StoredContent(333), -1, false));
-    dir.addChild(new DirectoryEntry("subDir"));
-    new DeleteChange(nextId(), "entry", dir);
-
-  }
-  public void CreateChangeContentChange(){
-    new ContentChange(nextId(), "file", null, -1);
-  }
-
 }
