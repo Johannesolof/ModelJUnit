@@ -28,6 +28,7 @@ public class Model implements FsmModel {
 
   private enum Change{ CreateFolder, CreatedFile, Move, Rename, Delete, ChangeContent }
 
+  private Change c = Change.CreateFolder;
 
   private State state = State.Idle;
 
@@ -44,8 +45,15 @@ public class Model implements FsmModel {
 
   @Action
   public void change() {
-    if (state == State.Idle) {
-     //TODO
+    if (state == State.Idle && (c==Change.CreatedFile||
+    c==Change.CreatedFile||
+    c==Change.Move||
+    c==Change.Rename||
+    c==Change.Delete||
+    c==Change.ChangeContent)) {
+     //TODO in adapter
+
+
       state = State.NewChanges;
     }
   }
@@ -53,7 +61,9 @@ public class Model implements FsmModel {
   @Action
   public void changeSet() {
     if (state == State.NewChanges) {
-      //TODO
+      //TODO in adapter
+
+
       state = State.NewChangeSet;
     }
   }
@@ -61,7 +71,9 @@ public class Model implements FsmModel {
   @Action
   public void changeListAppend() {
     if (state == State.NewChangeSet) {
-      //TODO
+      //TODO in adapter
+
+
       state = State.Idle;
     }
   }
