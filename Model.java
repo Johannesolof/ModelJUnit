@@ -71,7 +71,6 @@ public class Model implements FsmModel {
     return state == State.Idle;
   }
 
-
   @Action
   public void moveFile() {
     myChangeAdapter.moveFile();
@@ -81,7 +80,6 @@ public class Model implements FsmModel {
   public boolean moveFileGuard() {
     return state == State.Idle;
   }
-
 
   @Action
   public void deleteFile() {
@@ -133,6 +131,31 @@ public class Model implements FsmModel {
 
   //endregion
 
+  //region Closing actions
+  @Action
+  public void closeView() throws Exception {
+    myHistoryAdapter.closeView();
+    if(prevView == null) throw new Exception("");
+    state = prevView;
+    prevView = null;
+  }
+
+  public boolean closeViewGuard() {
+    return state == State.HistoryViewSourceTree || state == State.ClosingDialog;
+  }
+
+  @Action
+  public void closingDialog() {
+    myHistoryAdapter.closingDialog();
+    state = prevView;
+  }
+
+  public boolean closingViewGuard() {
+    return state == State.DifferenceViewReadOnly;
+  }
+  //endregion
+
+  //region HistoryViewSourceTree
   @Action
   public void showHistoryOfFolder() {
     myHistoryAdapter.showHistoryFolder();
@@ -144,28 +167,8 @@ public class Model implements FsmModel {
   }
 
   @Action
-  public void closeView() {
-    myHistoryAdapter.closeView();
-    switch (prevView)
-    {
-      case Idle:
-        state = State.Idle;
-        break;
-      case HistoryViewSourceTree:
-        state = State.HistoryViewSourceTree;
-        break;
-    }
-    prevView = State.Idle;
-  }
-
-  public boolean closeViewGuard() {
-    return state == State.HistoryViewSourceTree || state == State.ClosingDialog;
-  }
-
-  @Action
   public void newSelectionSourceTree() {
     myHistoryAdapter.newSelectionSourceTree();
-    state = State.HistoryViewSourceTree;
   }
 
   public boolean newSelectionSourceTreeGuard() {
@@ -173,32 +176,127 @@ public class Model implements FsmModel {
   }
 
   @Action
-  public void showDifferenceReadOnly() {
-    myHistoryAdapter.showDifferenceReadOnly();
+  public void showDifferenceReadOnlyFromSourceTree() {
+    myHistoryAdapter.showDifferenceReadOnlyFromSourceTree();
     prevView = State.HistoryViewSourceTree;
     state = State.DifferenceViewReadOnly;
   }
 
-  public boolean showDifferenceReadOnlyGuard() {
+  public boolean showDifferenceReadOnlyFromSourceTreeGuard() {
     return state == State.HistoryViewSourceTree;
+  }
+  //endregion
+
+  //region History View - File Differences
+  @Action
+  public void showHistoryFile() {
+    myHistoryAdapter.showHistoryFile();
+    state = State.HistoryViewFileDifference;
+  }
+
+  public boolean showHistoryFileGuard() {
+    return state == State.Idle;
   }
 
   @Action
-  public void closingView() {
-    myHistoryAdapter.closingView();
-    state = State.ClosingDialog;
+  public void showHistoryClass() {
+    myHistoryAdapter.showHistoryClass();
+    state = State.HistoryViewFileDifference;
   }
 
-  public boolean closingViewGuard() {
-    return state == State.DifferenceViewReadOnly;
+  public boolean showHistoryClassGuard() {
+    return state == State.Idle;
   }
-  
+
+  @Action
+  public void showHistoryMethod() {
+    myHistoryAdapter.showHistoryMethod();
+    state = State.HistoryViewFileDifference;
+  }
+
+  public boolean showHistoryMethodGuard() {
+    return state == State.Idle;
+  }
+
+  @Action
+  public void showHistoryField() {
+    myHistoryAdapter.showHistoryField();
+    state = State.HistoryViewFileDifference;
+  }
+
+  public boolean showHistoryFieldGuard() {
+    return state == State.Idle;
+  }
+
+  @Action
+  public void showHistorySelection() {
+    myHistoryAdapter.showHistorySelection();
+    state = State.HistoryViewFileDifference;
+  }
+
+  public boolean showHistorySelectionGuard() {
+    return state == State.Idle;
+  }
+
+  @Action
+  public void newSelectionFileDifferences() {
+    myHistoryAdapter.newSelectionFileDifferences();
+  }
+
+  public boolean newSelectionFileDifferencesGuard() {
+    return state == State.HistoryViewFileDifference;
+  }
+  //endregion
+
+  //region Recent Changes
+
+  @Action
+  public void recentChanges() {
+    myHistoryAdapter.recentChanges();
+    state = State.ListViewRecentChanges;
+  }
+
+  public boolean recentChangesGuard() {
+    return state == State.Idle;
+  }
+
+  @Action
+  public void newSelectionRecentChanges() {
+    myHistoryAdapter.newSelectionRecentChanges();
+  }
+
+  public boolean newSelectionRecentChangesGuard() {
+    return state == State.ListViewRecentChanges;
+  }
+
+  @Action
+  public void showSelectedRecentChanges() {
+    myHistoryAdapter.showSelectedRecentChanges();
+    state = State.HistoryViewSingleFile;
+  }
+
+  public boolean showSelectedRecentChangesGuard() {
+    return state == State.ListViewRecentChanges;
+  }
+
+  @Action
+  public void showDifferenceReadOnlyFromSingleFile() {
+    myHistoryAdapter.showDifferenceReadOnlyFromSingleFile();
+    prevView = state;
+    state = State.DifferenceViewReadOnly;
+  }
+
+  public boolean showDifferenceReadOnlyFromSingleFileGuard() {
+    return state == State.HistoryViewSingleFile;
+  }
+  //endregion
+
   //region Revert
-/*
+
   @Action
   public void revertFromSourceTree() {
     myChangeAdapter.revertFromSourceTree();
-    prevView = State.HistoryViewSourceTree;
+    prevView = state;
     state = State.Reverting;
   }
 
@@ -209,7 +307,7 @@ public class Model implements FsmModel {
   @Action
   public void revertFromFileDifference() {
     myChangeAdapter.revertFromFileDifference();
-    prevView = State.HistoryViewFileDifference;
+    prevView = state;
     state = State.Reverting;
   }
 
@@ -220,15 +318,24 @@ public class Model implements FsmModel {
   @Action
   public void revertFromSingleFile() {
     myChangeAdapter.revertFromSingleFile();
-    prevView = State.HistoryViewSingleFile;
+    prevView = state;
     state = State.Reverting;
   }
 
   public boolean revertFromSingleFileGuard() {
     return state == State.HistoryViewSingleFile;
   }
+
+  @Action
+  public void returnFromReverting() {
+    myChangeAdapter.returnFromReverting();
+    state = prevView;
+  }
+
+  public boolean returnFromRevertingGuard() {
+    return state == State.FinishReverting;
+  }
   
-  //
-  */
+  //endregion
   
 }
