@@ -25,13 +25,9 @@ import com.intellij.history.core.tree.RootEntry;
 /**
  * Created by johannes on 2016-05-16.
  */
-public class Adapter extends LocalHistoryTestCase {
- // protected LocalHistoryFacade facade = new InMemoryLocalHistoryFacade();
+public class ChangeAdapter extends ChangeListTestCase {
 
-  protected LocalHistoryFacade facade = LocalHistoryFacadeSingleton.getInstance();
-  protected RootEntry r = new RootEntry();
-
-  int changes = 0;
+  private int changes = 0;
 
   public void createFile() {
     changes++;

@@ -26,10 +26,9 @@ import javax.xml.ws.Action;
 /**
  * Created by hui on 16/05/16.
  */
-public class HistoryDialogAdapter extends LocalHistoryUITestCase {
+public class HistoryAdapter extends LocalHistoryUITestCase {
 
-
-  int changes = 0;
+  private int changes = 0;
 
   @Action
   public void showHistoryFolder(){

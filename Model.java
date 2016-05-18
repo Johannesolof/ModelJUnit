@@ -15,8 +15,6 @@
  */
 package com.intellij.history.ModelJUnit;
 
-import com.intellij.history.core.LocalHistoryFacade;
-import com.intellij.psi.codeStyle.arrangement.match.StandardArrangementEntryMatcherTest;
 import nz.ac.waikato.modeljunit.Action;
 import nz.ac.waikato.modeljunit.FsmModel;
 
@@ -25,8 +23,8 @@ import nz.ac.waikato.modeljunit.FsmModel;
  */
 public class Model implements FsmModel {
 
-  private Adapter adapter = new Adapter();
-  private HistoryDialogAdapter myHistoryDialogAdapter = new HistoryDialogAdapter();
+  private ChangeAdapter myChangeAdapter = new ChangeAdapter();
+  private HistoryAdapter myHistoryAdapter = new HistoryAdapter();
 
   private enum State {
     Idle,
@@ -48,14 +46,14 @@ public class Model implements FsmModel {
 
   @Override
   public void reset(boolean b) {
-    adapter = new Adapter();
+    myChangeAdapter = new ChangeAdapter();
     state = State.Idle;
   }
 
   //region Changes
   @Action
   public void createFile() {
-    adapter.createFile();
+    myChangeAdapter.createFile();
     state = State.NewChange;
   }
 
@@ -65,7 +63,7 @@ public class Model implements FsmModel {
 
   @Action
   public void renameFile() {
-    adapter.renameFile();
+    myChangeAdapter.renameFile();
     state = State.NewChange;
   }
 
@@ -76,7 +74,7 @@ public class Model implements FsmModel {
 
   @Action
   public void moveFile() {
-    adapter.moveFile();
+    myChangeAdapter.moveFile();
     state = State.NewChange;
   }
 
@@ -87,7 +85,7 @@ public class Model implements FsmModel {
 
   @Action
   public void deleteFile() {
-    adapter.deleteFile();
+    myChangeAdapter.deleteFile();
     state = State.NewChange;
   }
 
@@ -97,7 +95,7 @@ public class Model implements FsmModel {
 
   @Action
   public void createFolder() {
-    adapter.createFolder();
+    myChangeAdapter.createFolder();
     state = State.NewChange;
   }
 
@@ -107,7 +105,7 @@ public class Model implements FsmModel {
 
   @Action
   public void changeContent() {
-    adapter.changeContent();
+    myChangeAdapter.changeContent();
     state = State.NewChange;
   }
 
@@ -137,7 +135,7 @@ public class Model implements FsmModel {
 
   @Action
   public void showHistoryOfFolder() {
-    myHistoryDialogAdapter.showHistoryFolder();
+    myHistoryAdapter.showHistoryFolder();
     state = State.HistoryViewSourceTree;
   }
 
@@ -147,7 +145,7 @@ public class Model implements FsmModel {
 
   @Action
   public void closeView() {
-    myHistoryDialogAdapter.closeView();
+    myHistoryAdapter.closeView();
     switch (prevView)
     {
       case Idle:
@@ -166,7 +164,7 @@ public class Model implements FsmModel {
 
   @Action
   public void newSelectionSourceTree() {
-    myHistoryDialogAdapter.newSelectionSourceTree();
+    myHistoryAdapter.newSelectionSourceTree();
     state = State.HistoryViewSourceTree;
   }
 
@@ -176,7 +174,7 @@ public class Model implements FsmModel {
 
   @Action
   public void showDifferenceReadOnly() {
-    myHistoryDialogAdapter.showDifferenceReadOnly();
+    myHistoryAdapter.showDifferenceReadOnly();
     prevView = State.HistoryViewSourceTree;
     state = State.DifferenceViewReadOnly;
   }
@@ -187,7 +185,7 @@ public class Model implements FsmModel {
 
   @Action
   public void closingView() {
-    myHistoryDialogAdapter.closingView();
+    myHistoryAdapter.closingView();
     state = State.ClosingDialog;
   }
 
@@ -199,7 +197,7 @@ public class Model implements FsmModel {
 /*
   @Action
   public void revertFromSourceTree() {
-    adapter.revertFromSourceTree();
+    myChangeAdapter.revertFromSourceTree();
     prevView = State.HistoryViewSourceTree;
     state = State.Reverting;
   }
@@ -210,7 +208,7 @@ public class Model implements FsmModel {
 
   @Action
   public void revertFromFileDifference() {
-    adapter.revertFromFileDifference();
+    myChangeAdapter.revertFromFileDifference();
     prevView = State.HistoryViewFileDifference;
     state = State.Reverting;
   }
@@ -221,7 +219,7 @@ public class Model implements FsmModel {
 
   @Action
   public void revertFromSingleFile() {
-    adapter.revertFromSingleFile();
+    myChangeAdapter.revertFromSingleFile();
     prevView = State.HistoryViewSingleFile;
     state = State.Reverting;
   }
