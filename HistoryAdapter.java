@@ -17,47 +17,135 @@ package com.intellij.history.ModelJUnit;
 
 import com.intellij.history.core.LocalHistoryFacade;
 import com.intellij.history.core.LocalHistoryTestCase;
+import com.intellij.history.core.revisions.Revision;
 import com.intellij.history.integration.ui.LocalHistoryUITestCase;
+import com.intellij.history.integration.ui.models.HistoryDialogModel;
 import com.intellij.history.integration.ui.views.DirectoryHistoryDialog;
 import com.intellij.openapi.util.Disposer;
 
 import javax.xml.ws.Action;
+import java.util.List;
 
 /**
  * Created by hui on 16/05/16.
  */
 public class HistoryAdapter extends LocalHistoryUITestCase {
 
+  private long myCurrentId = 0;
   private int changes = 0;
 
-  @Action
+  DirectoryHistoryDialog myDirectoryHistoryDialog;
+  HistoryDialogModel myHistoryDialogModel;
+
   public void showHistoryFolder(){
-   //TODO
-  //  DirectoryHistoryDialog d = new DirectoryHistoryDialog(myProject, myGateway, myRoot);
-   // Disposer.dispose(d);
+    //TODO
+    myDirectoryHistoryDialog = new DirectoryHistoryDialog(myProject, myGateway, myRoot);
+
+    //TODO create somewhere else?
+    createChildData(myRoot, getNewFilename());
+    createChildData(myRoot, getNewFilename());
+
   }
 
-  @Action
   public void newSelectionSourceTree(){
     //TODO
   }
 
-  @Action
   public void closeView(){
     //TODO
 
+    if (myDirectoryHistoryDialog != null) {
+      Disposer.dispose(myDirectoryHistoryDialog);
+      myDirectoryHistoryDialog = null;
+      myHistoryDialogModel = null;
+    }
+    // Disposer history dialog if instance exists
   }
 
-  @Action
   public void showDifferenceReadOnly(){
     //TODO
 
   }
 
-  @Action
   public void closingView() {
     //TODO
   }
 
+  public void closingDialog() {
+    //TODO
+  }
 
+  public void showDifferenceReadOnlyFromSourceTree() {
+    //TODO
+  }
+
+  public void showHistoryFile() {
+    //TODO
+  }
+
+  public void showHistoryClass() {
+    //TODO
+  }
+
+  public void showHistoryMethod() {
+    //TODO
+  }
+
+  public void showHistoryField() {
+    //TODO
+  }
+
+  public void showHistorySelection() {
+    //TODO
+  }
+
+  public void recentChanges() {
+    //TODO
+  }
+
+  public void showSelectedRecentChanges() {
+    //TODO
+  }
+
+  public void showDifferenceReadOnlyFromSingleFile() {
+    //TODO
+  }
+
+  public void newSelectionFileDifferences() {
+    //TODO
+  }
+
+  public void newSelectionRecentChanges() {
+    //TODO
+  }
+
+  public void revertFromSourceTree() {
+    //TODO
+  }
+
+  public void revertFromFileDifference() {
+    //TODO
+  }
+
+  public void revertFromSingleFile() {
+    //TODO
+  }
+
+  public void returnFromReverting() {
+    //TODO
+  }
+
+  /* *** HELPERS *** */
+  private long nextId() {
+    return myCurrentId++;
+  }
+
+  private String getNewFilename() {
+    StringBuilder s = new StringBuilder();
+    s.append("file");
+    s.append(nextId());
+    s.append(".txt");
+
+    return  s.toString();
+  }
 }

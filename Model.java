@@ -295,7 +295,7 @@ public class Model implements FsmModel {
 
   @Action
   public void revertFromSourceTree() {
-    myChangeAdapter.revertFromSourceTree();
+    myHistoryAdapter.revertFromSourceTree();
     prevView = state;
     state = State.Reverting;
   }
@@ -306,7 +306,7 @@ public class Model implements FsmModel {
 
   @Action
   public void revertFromFileDifference() {
-    myChangeAdapter.revertFromFileDifference();
+    myHistoryAdapter.revertFromFileDifference();
     prevView = state;
     state = State.Reverting;
   }
@@ -317,7 +317,7 @@ public class Model implements FsmModel {
 
   @Action
   public void revertFromSingleFile() {
-    myChangeAdapter.revertFromSingleFile();
+    myHistoryAdapter.revertFromSingleFile();
     prevView = state;
     state = State.Reverting;
   }
@@ -328,7 +328,7 @@ public class Model implements FsmModel {
 
   @Action
   public void returnFromReverting() {
-    myChangeAdapter.returnFromReverting();
+    myHistoryAdapter.returnFromReverting();
     state = prevView;
   }
 
