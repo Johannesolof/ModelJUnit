@@ -22,8 +22,10 @@ import com.intellij.history.integration.ui.LocalHistoryUITestCase;
 import com.intellij.history.integration.ui.models.HistoryDialogModel;
 import com.intellij.history.integration.ui.views.DirectoryHistoryDialog;
 import com.intellij.openapi.util.Disposer;
+import com.intellij.util.io.PersistentHashMapValueStorage;
 
 import javax.xml.ws.Action;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -37,29 +39,63 @@ public class HistoryAdapter extends LocalHistoryUITestCase {
   DirectoryHistoryDialog myDirectoryHistoryDialog;
   HistoryDialogModel myHistoryDialogModel;
 
+  public HistoryAdapter() {
+    try {
+      System.out.println("Running setUp!");
+      setUp();
+      System.out.println("Completed setUp!");
+    }
+
+
+    catch (Exception e) {
+      System.out.println(e);
+      System.exit(-1);
+    }
+  }
+
+  public void tearDown() throws Exception {
+    super.tearDown();
+  }
+
+  public void showHistoryFolder() {
+    DirectoryHistoryDialog d = new DirectoryHistoryDialog(myProject, myGateway, myRoot);
+    Disposer.dispose(d);
+  }
+  /*
   public void showHistoryFolder(){
+
+    System.out.println("In showHistoryFolder!");
+    //LocalHistoryFacade facade = getVcs()
     //TODO
     myDirectoryHistoryDialog = new DirectoryHistoryDialog(myProject, myGateway, myRoot);
+    Disposer.dispose(myDirectoryHistoryDialog);
+
+    /*
+    System.out.println("Passed it.");
 
     //TODO create somewhere else?
     createChildData(myRoot, getNewFilename());
     createChildData(myRoot, getNewFilename());
 
+    System.out.println(getVcs().getChangeListInTests().getChangesInTests().size());
+    System.out.println(getVcs().getChangeListInTests().getChangesInTests().toString());
+
   }
+    */
 
   public void newSelectionSourceTree(){
     //TODO
   }
 
   public void closeView(){
-    //TODO
+    //TODO - Implement for all views
 
+    // Dispose of history dialog if instance exists
     if (myDirectoryHistoryDialog != null) {
       Disposer.dispose(myDirectoryHistoryDialog);
       myDirectoryHistoryDialog = null;
       myHistoryDialogModel = null;
     }
-    // Disposer history dialog if instance exists
   }
 
   public void showDifferenceReadOnly(){

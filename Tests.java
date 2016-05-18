@@ -15,6 +15,7 @@
  */
 package com.intellij.history.ModelJUnit;
 
+import com.intellij.ui.navigation.History;
 import nz.ac.waikato.modeljunit.RandomTester;
 import nz.ac.waikato.modeljunit.StopOnFailureListener;
 import nz.ac.waikato.modeljunit.Tester;
@@ -25,10 +26,13 @@ import nz.ac.waikato.modeljunit.coverage.TransitionCoverage;
 import nz.ac.waikato.modeljunit.gui.visualisaton.VisualisationListener;
 import org.junit.Test;
 
+import javax.swing.*;
+
 /**
  * Created by johannes on 2016-05-16.
  */
 public class Tests {
+
   @Test
   public void test() throws Exception {
     Model fireModel = new Model();
@@ -49,6 +53,28 @@ public class Tests {
 
     tester.generate(200);
     tester.printCoverage();
+  }
 
+  @Test
+  public void dummyTest() throws Exception {
+
+    SwingUtilities.invokeAndWait(() -> {
+      HistoryAdapter ha = null;
+      try {
+        ha = new HistoryAdapter();
+        ha.showHistoryFolder();
+      }
+      catch (Exception e) {
+        e.printStackTrace();
+      }
+      finally {
+        try {
+          ha.tearDown();
+        }
+        catch (Exception e) {
+          e.printStackTrace();
+        }
+      }
+    });
   }
 }
