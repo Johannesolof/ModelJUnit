@@ -30,19 +30,40 @@ import javax.swing.*;
  * Created by johannes on 2016-05-16.
  */
 public class Tests {
-
   @Test
-  public void test() throws Exception {
+  public void tests() throws Exception{
+    test(0);
+    test(1);
+    test(2);
+    test(3);
+
+  }
+
+
+  public void test(int id) throws Exception {
     SwingUtilities.invokeAndWait(() -> {
       Model m = null;
       Tester tester = null;
       try {
         m = new Model();
-        tester = new RandomTester(m);
-        //tester = new GreedyTester(m);
-        //tester = new AllRoundTester(m);
-        //tester = new LookaheadTester(m);
-
+        switch (id){
+          case 0:
+            System.out.println("-----Start RandomTest-----");
+            tester = new RandomTester(m);
+            break;
+          case 1:
+            System.out.println("-----Start GreedyTest-----");
+            tester = new GreedyTester(m);
+            break;
+          case 2:
+            System.out.println("-----Start AllRoundTest-----");
+            tester = new AllRoundTester(m);
+            break;
+          case 3:
+            System.out.println("-----Start LookaheadTest-----");
+            tester = new LookaheadTester(m);
+            break;
+        }
         tester.buildGraph();
         tester.addListener(new VerboseListener());
         tester.addListener(new StopOnFailureListener());
@@ -65,7 +86,7 @@ public class Tests {
           }
         });
 
-        tester.generate(2000);
+        tester.generate(200);
         tester.printCoverage();
 
       }
@@ -75,6 +96,7 @@ public class Tests {
       finally {
         try {
           if (m != null) m.tearDown();
+          System.out.println("-----End-----");
         }
         catch (Exception e) {
           e.printStackTrace();
