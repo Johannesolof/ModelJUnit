@@ -73,5 +73,8 @@ public class ChangeAdapter extends ChangeListTestCase {
   }
 
 
+  public void reset() {
+    changes = 0;
+  }
 }
 

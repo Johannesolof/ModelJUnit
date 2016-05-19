@@ -15,18 +15,18 @@
  */
 package com.intellij.history.ModelJUnit;
 
-import com.intellij.history.core.LocalHistoryFacade;
-import com.intellij.history.core.LocalHistoryTestCase;
-import com.intellij.history.core.revisions.Revision;
+import com.intellij.history.core.revisions.RecentChange;
+import com.intellij.history.integration.revertion.Reverter;
 import com.intellij.history.integration.ui.LocalHistoryUITestCase;
-import com.intellij.history.integration.ui.models.HistoryDialogModel;
+import com.intellij.history.integration.ui.models.EntireFileHistoryDialogModel;
+import com.intellij.history.integration.ui.models.FileHistoryDialogModel;
+import com.intellij.history.integration.ui.models.RecentChangeDialogModel;
 import com.intellij.history.integration.ui.views.DirectoryHistoryDialog;
+import com.intellij.history.integration.ui.views.RecentChangeDialog;
 import com.intellij.openapi.util.Disposer;
-import com.intellij.util.io.PersistentHashMapValueStorage;
+import com.intellij.openapi.vfs.VirtualFile;
 
-import javax.xml.ws.Action;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Created by hui on 16/05/16.
@@ -34,10 +34,9 @@ import java.util.List;
 public class HistoryAdapter extends LocalHistoryUITestCase {
 
   private long myCurrentId = 0;
-  private int changes = 0;
 
   DirectoryHistoryDialog myDirectoryHistoryDialog;
-  HistoryDialogModel myHistoryDialogModel;
+  FileHistoryDialogModel myFileHistoryDialogModel;
 
   public HistoryAdapter() {
     try {
@@ -58,30 +57,11 @@ public class HistoryAdapter extends LocalHistoryUITestCase {
   }
 
   public void showHistoryFolder() {
-    DirectoryHistoryDialog d = new DirectoryHistoryDialog(myProject, myGateway, myRoot);
-    Disposer.dispose(d);
-  }
-  /*
-  public void showHistoryFolder(){
-
-    System.out.println("In showHistoryFolder!");
-    //LocalHistoryFacade facade = getVcs()
-    //TODO
     myDirectoryHistoryDialog = new DirectoryHistoryDialog(myProject, myGateway, myRoot);
-    Disposer.dispose(myDirectoryHistoryDialog);
-
-    /*
-    System.out.println("Passed it.");
-
     //TODO create somewhere else?
     createChildData(myRoot, getNewFilename());
     createChildData(myRoot, getNewFilename());
-
-    System.out.println(getVcs().getChangeListInTests().getChangesInTests().size());
-    System.out.println(getVcs().getChangeListInTests().getChangesInTests().toString());
-
   }
-    */
 
   public void newSelectionSourceTree(){
     //TODO
@@ -94,17 +74,8 @@ public class HistoryAdapter extends LocalHistoryUITestCase {
     if (myDirectoryHistoryDialog != null) {
       Disposer.dispose(myDirectoryHistoryDialog);
       myDirectoryHistoryDialog = null;
-      myHistoryDialogModel = null;
     }
-  }
-
-  public void showDifferenceReadOnly(){
-    //TODO
-
-  }
-
-  public void closingView() {
-    //TODO
+    myFileHistoryDialogModel = null;
   }
 
   public void closingDialog() {
@@ -112,39 +83,123 @@ public class HistoryAdapter extends LocalHistoryUITestCase {
   }
 
   public void showDifferenceReadOnlyFromSourceTree() {
+
+    createChildData(myRoot, getNewFilename());
+    createChildData(myRoot, getNewFilename());
+
+    myFileHistoryDialogModel.selectRevisions(1, 1);
+
     //TODO
   }
 
+
   public void showHistoryFile() {
+    VirtualFile f = createChildData(myRoot, getNewFilename());
+    setBinaryContent(f, "old".getBytes());
+    setBinaryContent(f, "new".getBytes());
+    setBinaryContent(f, "current".getBytes());
+    myFileHistoryDialogModel = createFileModel(f);
+    myFileHistoryDialogModel.selectRevisions(0, 1);
     //TODO
   }
 
   public void showHistoryClass() {
+
+    VirtualFile f = createChildData(myRoot, getNewFilename());
+    setBinaryContent(f, "old".getBytes());
+    setBinaryContent(f, "new".getBytes());
+    setBinaryContent(f, "current".getBytes());
+    myFileHistoryDialogModel = createFileModel(f);
+    myFileHistoryDialogModel.selectRevisions(0, 1);
     //TODO
   }
 
   public void showHistoryMethod() {
+
+    VirtualFile f = createChildData(myRoot, getNewFilename());
+    setBinaryContent(f, "old".getBytes());
+    setBinaryContent(f, "new".getBytes());
+    setBinaryContent(f, "current".getBytes());
+    myFileHistoryDialogModel = createFileModel(f);
+    myFileHistoryDialogModel.selectRevisions(0, 1);
     //TODO
   }
 
   public void showHistoryField() {
+    VirtualFile f = createChildData(myRoot, getNewFilename());
+    setBinaryContent(f, "old".getBytes());
+    setBinaryContent(f, "new".getBytes());
+    setBinaryContent(f, "current".getBytes());
+    myFileHistoryDialogModel = createFileModel(f);
+    myFileHistoryDialogModel.selectRevisions(0, 1);
     //TODO
   }
 
   public void showHistorySelection() {
+    VirtualFile f = createChildData(myRoot, getNewFilename());
+    setBinaryContent(f, "old".getBytes());
+    setBinaryContent(f, "new".getBytes());
+    setBinaryContent(f, "current".getBytes());
+    myFileHistoryDialogModel = createFileModel(f);
+    myFileHistoryDialogModel.selectRevisions(0, 1);
     //TODO
   }
 
   public void recentChanges() {
+    getVcs().beginChangeSet();
+    createChildData(myRoot, getNewFilename());
+    getVcs().endChangeSet("change");
+
+    RecentChange c = getVcs().getRecentChanges(getRootEntry()).get(0);
+    RecentChangeDialog d = null;
+
+    try {
+      d = new RecentChangeDialog(myProject, myGateway, c);
+    }
+    finally {
+      if (d != null) {
+        Disposer.dispose(d);
+      }
+    }
     //TODO
   }
 
   public void showSelectedRecentChanges() {
+    getVcs().beginChangeSet();
+    createChildData(myRoot, getNewFilename());
+    getVcs().endChangeSet("change");
+
+    RecentChange c = getVcs().getRecentChanges(getRootEntry()).get(0);
+    RecentChangeDialog d = null;
+
+    try {
+      d = new RecentChangeDialog(myProject, myGateway, c);
+    }
+    finally {
+      if (d != null) {
+        Disposer.dispose(d);
+      }
+    }
     //TODO
   }
 
   public void showDifferenceReadOnlyFromSingleFile() {
     //TODO
+    getVcs().beginChangeSet();
+    createChildData(myRoot, getNewFilename());
+    getVcs().endChangeSet("change");
+
+    RecentChange c = getVcs().getRecentChanges(getRootEntry()).get(0);
+    RecentChangeDialog d = null;
+
+    try {
+      d = new RecentChangeDialog(myProject, myGateway, c);
+    }
+    finally {
+      if (d != null) {
+        Disposer.dispose(d);
+      }
+    }
   }
 
   public void newSelectionFileDifferences() {
@@ -152,24 +207,65 @@ public class HistoryAdapter extends LocalHistoryUITestCase {
   }
 
   public void newSelectionRecentChanges() {
+
+  }
+
+  public void revertFromSourceTree() throws IOException {
+    getVcs().beginChangeSet();
+    createChildData(myRoot, getNewFilename());
+    getVcs().endChangeSet("change");
+
+    getVcs().beginChangeSet();
+    createChildData(myRoot, getNewFilename());
+    getVcs().endChangeSet("another change");
+
+    RecentChange c = getVcs().getRecentChanges(getRootEntry()).get(1);
+    RecentChangeDialogModel m = new RecentChangeDialogModel(myProject, myGateway, getVcs(), c);
+
+    Reverter r = m.createReverter();
+    r.revert();
     //TODO
   }
 
-  public void revertFromSourceTree() {
+  public void revertFromFileDifference() throws IOException {
+    getVcs().beginChangeSet();
+    createChildData(myRoot, getNewFilename());
+    getVcs().endChangeSet("change");
+
+    getVcs().beginChangeSet();
+    createChildData(myRoot, getNewFilename());
+    getVcs().endChangeSet("another change");
+
+    RecentChange c = getVcs().getRecentChanges(getRootEntry()).get(1);
+    RecentChangeDialogModel m = new RecentChangeDialogModel(myProject, myGateway, getVcs(), c);
+
+    Reverter r = m.createReverter();
+    r.revert();
     //TODO
   }
 
-  public void revertFromFileDifference() {
-    //TODO
-  }
+  public void revertFromSingleFile() throws Exception {
+    getVcs().beginChangeSet();
+    createChildData(myRoot, getNewFilename());
+    getVcs().endChangeSet("change");
 
-  public void revertFromSingleFile() {
+    getVcs().beginChangeSet();
+    createChildData(myRoot, getNewFilename());
+    getVcs().endChangeSet("another change");
+
+    RecentChange c = getVcs().getRecentChanges(getRootEntry()).get(1);
+    RecentChangeDialogModel m = new RecentChangeDialogModel(myProject, myGateway, getVcs(), c);
+
+    Reverter r = m.createReverter();
+    r.revert();
     //TODO
   }
 
   public void returnFromReverting() {
     //TODO
+    nextId();
   }
+
 
   /* *** HELPERS *** */
   private long nextId() {
@@ -183,5 +279,20 @@ public class HistoryAdapter extends LocalHistoryUITestCase {
     s.append(".txt");
 
     return  s.toString();
+  }
+
+  private FileHistoryDialogModel createFileModel(VirtualFile f) {
+    return new EntireFileHistoryDialogModel(myProject, myGateway, getVcs(), f);
+  }
+
+  public void reset() {
+    try {
+      super.tearDown();
+      super.setUp();
+
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 }

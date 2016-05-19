@@ -18,13 +18,24 @@ package com.intellij.history.ModelJUnit;
 import nz.ac.waikato.modeljunit.Action;
 import nz.ac.waikato.modeljunit.FsmModel;
 
+import java.io.IOException;
+
 /**
  * Created by johannes on 2016-05-16.
  */
 public class Model implements FsmModel {
 
-  private ChangeAdapter myChangeAdapter = new ChangeAdapter();
-  private HistoryAdapter myHistoryAdapter = new HistoryAdapter();
+  private ChangeAdapter myChangeAdapter;
+  private HistoryAdapter myHistoryAdapter;
+
+  public Model(){
+    myHistoryAdapter = new HistoryAdapter();
+    myChangeAdapter = new ChangeAdapter();
+  }
+
+  public void tearDown() throws Exception {
+    myHistoryAdapter.tearDown();
+  }
 
   private enum State {
     Idle,
@@ -32,7 +43,7 @@ public class Model implements FsmModel {
     HistoryViewSourceTree, HistoryViewFileDifference, HistoryViewSingleFile,
     ListViewRecentChanges,
     DifferenceViewReadOnly, ClosingDialog,
-    Reverting, FinishReverting,
+    Reverting,
   }
 
   private State state = State.Idle;
@@ -46,7 +57,8 @@ public class Model implements FsmModel {
 
   @Override
   public void reset(boolean b) {
-    myChangeAdapter = new ChangeAdapter();
+    myHistoryAdapter.reset();
+    myChangeAdapter.reset();
     state = State.Idle;
   }
 
@@ -135,13 +147,14 @@ public class Model implements FsmModel {
   @Action
   public void closeView() throws Exception {
     myHistoryAdapter.closeView();
-    if(prevView == null) throw new Exception("");
-    state = prevView;
-    prevView = null;
+    //if(prevView == null) throw new Exception("");
+    state = State.Idle;
   }
 
   public boolean closeViewGuard() {
-    return state == State.HistoryViewSourceTree || state == State.ClosingDialog;
+    return state == State.HistoryViewSourceTree ||
+           state == State.HistoryViewFileDifference ||
+           state == State.HistoryViewSingleFile;
   }
 
   @Action
@@ -150,7 +163,7 @@ public class Model implements FsmModel {
     state = prevView;
   }
 
-  public boolean closingViewGuard() {
+  public boolean closingDialogGuard() {
     return state == State.DifferenceViewReadOnly;
   }
   //endregion
@@ -294,7 +307,7 @@ public class Model implements FsmModel {
   //region Revert
 
   @Action
-  public void revertFromSourceTree() {
+  public void revertFromSourceTree() throws IOException {
     myHistoryAdapter.revertFromSourceTree();
     prevView = state;
     state = State.Reverting;
@@ -305,7 +318,7 @@ public class Model implements FsmModel {
   }
 
   @Action
-  public void revertFromFileDifference() {
+  public void revertFromFileDifference() throws IOException {
     myHistoryAdapter.revertFromFileDifference();
     prevView = state;
     state = State.Reverting;
@@ -316,7 +329,7 @@ public class Model implements FsmModel {
   }
 
   @Action
-  public void revertFromSingleFile() {
+  public void revertFromSingleFile() throws Exception {
     myHistoryAdapter.revertFromSingleFile();
     prevView = state;
     state = State.Reverting;
@@ -333,7 +346,7 @@ public class Model implements FsmModel {
   }
 
   public boolean returnFromRevertingGuard() {
-    return state == State.FinishReverting;
+    return state == State.Reverting;
   }
   
   //endregion

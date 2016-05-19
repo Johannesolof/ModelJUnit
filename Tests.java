@@ -16,13 +16,11 @@
 package com.intellij.history.ModelJUnit;
 
 import com.intellij.ui.navigation.History;
-import nz.ac.waikato.modeljunit.RandomTester;
-import nz.ac.waikato.modeljunit.StopOnFailureListener;
-import nz.ac.waikato.modeljunit.Tester;
-import nz.ac.waikato.modeljunit.VerboseListener;
+import nz.ac.waikato.modeljunit.*;
 import nz.ac.waikato.modeljunit.coverage.ActionCoverage;
 import nz.ac.waikato.modeljunit.coverage.StateCoverage;
 import nz.ac.waikato.modeljunit.coverage.TransitionCoverage;
+import nz.ac.waikato.modeljunit.coverage.TransitionPairCoverage;
 import nz.ac.waikato.modeljunit.gui.visualisaton.VisualisationListener;
 import org.junit.Test;
 
@@ -35,41 +33,48 @@ public class Tests {
 
   @Test
   public void test() throws Exception {
-    Model fireModel = new Model();
-    Tester tester = new RandomTester(fireModel);
-
-    tester.buildGraph();
-    tester.addListener(new VerboseListener());
-    tester.addListener(new StopOnFailureListener());
-    tester.addCoverageMetric(new TransitionCoverage());
-    tester.addCoverageMetric(new ActionCoverage());
-
-    tester.addCoverageMetric(new StateCoverage() {
-      @Override
-      public String getName() {
-        return "Total state coverage";
-      }
-    });
-
-    tester.generate(200);
-    tester.printCoverage();
-  }
-
-  @Test
-  public void dummyTest() throws Exception {
-
     SwingUtilities.invokeAndWait(() -> {
-      HistoryAdapter ha = null;
+      Model m = null;
+      Tester tester = null;
       try {
-        ha = new HistoryAdapter();
-        ha.showHistoryFolder();
+        m = new Model();
+        tester = new RandomTester(m);
+        //tester = new GreedyTester(m);
+        //tester = new AllRoundTester(m);
+        //tester = new LookaheadTester(m);
+
+        tester.buildGraph();
+        tester.addListener(new VerboseListener());
+        tester.addListener(new StopOnFailureListener());
+        tester.addCoverageMetric(new TransitionCoverage() {
+          @Override
+          public String getName() { return "Total transition coverage";}
+        });
+        tester.addCoverageMetric(new ActionCoverage() {
+          @Override
+          public String getName() { return "Total action coverage";}
+        });
+        tester.addCoverageMetric(new TransitionPairCoverage() {
+          @Override
+          public String getName() { return "Total transition pair coverage";}
+        });
+        tester.addCoverageMetric(new StateCoverage() {
+          @Override
+          public String getName() {
+            return "Total state coverage";
+          }
+        });
+
+        tester.generate(200);
+        tester.printCoverage();
+
       }
       catch (Exception e) {
         e.printStackTrace();
       }
       finally {
         try {
-          ha.tearDown();
+          if (m != null) m.tearDown();
         }
         catch (Exception e) {
           e.printStackTrace();
