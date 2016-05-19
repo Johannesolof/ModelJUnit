@@ -65,7 +65,7 @@ public class Tests {
           }
         });
 
-        tester.generate(200);
+        tester.generate(2000);
         tester.printCoverage();
 
       }

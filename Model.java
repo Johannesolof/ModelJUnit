@@ -325,7 +325,7 @@ public class Model implements FsmModel {
   }
 
   public boolean revertFromFileDifferenceGuard() {
-    return state == State.HistoryViewFileDifference; 
+    return state == State.HistoryViewFileDifference;
   }
 
   @Action
@@ -348,7 +348,7 @@ public class Model implements FsmModel {
   public boolean returnFromRevertingGuard() {
     return state == State.Reverting;
   }
-  
+
   //endregion
-  
+
 }

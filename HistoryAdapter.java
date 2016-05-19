@@ -83,6 +83,8 @@ public class HistoryAdapter extends LocalHistoryUITestCase {
   }
 
   public void showDifferenceReadOnlyFromSourceTree() {
+    VirtualFile f = createChildData(myRoot, getNewFilename());
+    myFileHistoryDialogModel = createFileModel(f);
 
     createChildData(myRoot, getNewFilename());
     createChildData(myRoot, getNewFilename());
